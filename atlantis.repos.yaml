@@ -19,10 +19,6 @@ workflows:
       - plan:
           extra_args: ["-var-file", "env/dev.tfvars"]
       - run: echo terraform plan is automatically run for the dev environment. To run plan/apply for another environment, e.g. comment atlantis [plan/apply] -p [project]-[dev/qa].
-    apply:
-      steps:
-      - apply:
-          extra_args: ["-var-file", "env/dev.tfvars"]
 
   qa:
     plan:
@@ -30,8 +26,4 @@ workflows:
       - init:
           extra_args: ["-backend-config", "env/qa.hcl", "-reconfigure"]
       - plan:
-          extra_args: ["-var-file", "env/qa.tfvars"]
-    apply:
-      steps:
-      - apply:
           extra_args: ["-var-file", "env/qa.tfvars"]
