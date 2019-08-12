@@ -14,14 +14,11 @@ workflows:
   dev:
     plan:
       steps:
-      # We have to use a custom run step to rm -rf .terraform because otherwise
-      # Terraform will complain in-between commands since the backend config has
-      # changed.
-      - run: rm -rf .terraform
       - init:
           extra_args: ["-backend-config", "env/dev.hcl", "-reconfigure"]
       - plan:
           extra_args: ["-var-file", "env/dev.tfvars"]
+      - run: echo terraform plan is automatically run for the dev environment. To run plan/apply for another environment, e.g. comment atlantis [plan/apply] -p [project]-[dev/qa].
     apply:
       steps:
       - apply:
@@ -30,10 +27,6 @@ workflows:
   qa:
     plan:
       steps:
-      # We have to use a custom run step to rm -rf .terraform because otherwise
-      # Terraform will complain in-between commands since the backend config has
-      # changed.
-      - run: rm -rf .terraform
       - init:
           extra_args: ["-backend-config", "env/qa.hcl", "-reconfigure"]
       - plan:
