@@ -14,6 +14,10 @@ workflows:
   dev:
     plan:
       steps:
+      # We have to use a custom run step to rm -rf .terraform because otherwise
+      # Terraform will complain in-between commands since the backend config has
+      # changed.
+      - run: rm -rf .terraform
       - init:
           extra_args: ["-backend-config", "env/dev.hcl", "-reconfigure"]
       - plan:
@@ -26,6 +30,10 @@ workflows:
   qa:
     plan:
       steps:
+      # We have to use a custom run step to rm -rf .terraform because otherwise
+      # Terraform will complain in-between commands since the backend config has
+      # changed.
+      - run: rm -rf .terraform
       - init:
           extra_args: ["-backend-config", "env/qa.hcl", "-reconfigure"]
       - plan:
