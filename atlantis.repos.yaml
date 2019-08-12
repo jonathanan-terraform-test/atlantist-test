@@ -1,0 +1,37 @@
+# Configuration reference:
+# https://www.runatlantis.io/docs/server-side-repo-config.html#example-server-side-repo
+#
+# Usage:
+# https://www.runatlantis.io/docs/using-atlantis.html#atlantis-help
+
+repos:
+- id: /.*/
+  apply_requirements: [approved, mergeable]
+  allowed_overrides: [apply_requirements, workflow]
+  allow_custom_workflows: false
+
+workflows:
+  dev:
+    plan:
+      steps:
+      - init:
+          extra_args: ["-backend-config", "env/dev.hcl", "-reconfigure"]
+      - plan:
+          extra_args: ["-var-file", "env/dev.tfvars"]
+      - run: echo "`terraform plan` is automatically run for the dev environment. To run plan/apply for another environment, e.g. comment `atlantis [plan/apply] -p [project]-[dev/qa]`."
+    apply:
+      steps:
+      - apply:
+          extra_args: ["-var-file", "env/dev.tfvars"]
+
+  qa:
+    plan:
+      steps:
+      - init:
+          extra_args: ["-backend-config", "env/qa.hcl", "-reconfigure"]
+      - plan:
+          extra_args: ["-var-file", "env/qa.tfvars"]
+    apply:
+      steps:
+      - apply:
+          extra_args: ["-var-file", "env/qa.tfvars"]
